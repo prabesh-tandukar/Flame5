@@ -1,810 +1,705 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Flame 5 - Beyond The Burger</title>
+    <title>Flame 5 - Food Truck Menu</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Satisfy&family=Permanent+Marker&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap"
       rel="stylesheet"
     />
-    <style>
-      :root {
-        --primary-color: #ff6600;
-        --secondary-color: #ffcc00;
-        --dark-bg: #1a1a1a;
-        --light-text: #ffffff;
-        --accent-red: #ff4d4d;
-        --section-bg: rgba(255, 102, 0, 0.1);
-        --indian-section-bg: rgba(255, 77, 0, 0.15);
-      }
-
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: "Nunito", sans-serif;
-        background-color: var(--dark-bg);
-        color: var(--light-text);
-        line-height: 1.6;
-        background-image: linear-gradient(to bottom, #1a1a1a, #222222);
-        min-height: 100vh;
-      }
-
-      .container {
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: 1rem;
-        overflow-x: hidden;
-      }
-
-      /* Header and Logo Styling */
-      header {
-        text-align: center;
-        padding: 1.5rem 0;
-        position: relative;
-        margin-bottom: 2rem;
-      }
-
-      .flame-logo {
-        position: relative;
-        margin: 0 auto 1.5rem;
-        max-width: 450px;
-        transition: transform 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .flame-logo:hover {
-        transform: scale(1.02);
-      }
-
-      /* Bull Icon */
-      .bull-icon {
-        position: relative;
-        width: 80px;
-        height: 80px;
-        margin-right: 15px;
-      }
-
-      .bull-icon::before {
-        content: "";
-        position: absolute;
-        width: 80px;
-        height: 80px;
-
-        border-radius: 50%;
-        z-index: 0;
-      }
-
-      .bull-icon::after {
-        content: "";
-        position: absolute;
-        font-size: 54px;
-        left: 13px;
-        top: 0;
-        z-index: 1;
-        filter: drop-shadow(0 0 10px rgba(255, 102, 0, 0.8));
-      }
-
-      /* Text Logo */
-      .logo-text {
-        display: flex;
-        align-items: center;
-      }
-
-      .flame-text {
-        font-family: "Satisfy", cursive;
-        font-size: 4rem;
-        font-weight: bold;
-        background: linear-gradient(to right, #ff9900, #ff3300);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 0 10px rgba(255, 102, 0, 0.3);
-        line-height: 1;
-        margin-right: -5px;
-      }
-
-      .number-five {
-        font-family: "Permanent Marker", cursive;
-        font-size: 5rem;
-        color: #ff3300;
-        text-shadow: 2px 2px 0 #ffcc00, 4px 4px 5px rgba(0, 0, 0, 0.5);
-        line-height: 1;
-        transform: rotate(5deg);
-      }
-
-      .tagline {
-        font-size: 1.3rem;
-        color: var(--secondary-color);
-        margin: 0.5rem 0 1.5rem;
-        text-align: center;
-        letter-spacing: 2px;
-        font-weight: 600;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        background: rgba(255, 102, 0, 0.15);
-        padding: 10px 25px;
-        border-radius: 30px;
-        display: inline-block;
-        position: relative;
-        transition: all 0.3s ease;
-      }
-
-      .tagline:hover {
-        transform: translateY(-3px);
-        background: rgba(255, 102, 0, 0.25);
-        box-shadow: 0 5px 15px rgba(255, 102, 0, 0.2);
-      }
-
-      /* Animation for the logo and tagline */
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      @keyframes flicker {
-        0%,
-        100% {
-          text-shadow: 0 0 10px rgba(255, 102, 0, 0.3);
-        }
-        50% {
-          text-shadow: 0 0 20px rgba(255, 102, 0, 0.7),
-            0 0 30px rgba(255, 0, 0, 0.5);
-        }
-      }
-
-      .flame-text {
-        animation: flicker 3s infinite alternate;
-      }
-
-      .tagline {
-        animation: fadeIn 1s ease-out forwards;
-      }
-
-      .section-title {
-        font-family: "Permanent Marker", cursive;
-        font-size: 2.5rem;
-        color: var(--primary-color);
-        text-align: center;
-        margin: 2rem 0 1rem;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        letter-spacing: 1px;
-      }
-
-      .menu-section {
-        background-color: var(--section-bg);
-        border-radius: 15px;
-        padding: 1.5rem;
-        margin-bottom: 2rem;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        transition: transform 0.3s ease;
-      }
-
-      .menu-section:hover {
-        transform: translateY(-5px);
-      }
-
-      .menu-section.indian {
-        background-color: var(--indian-section-bg);
-      }
-
-      .menu-item {
-        margin-bottom: 1.5rem;
-        position: relative;
-        border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
-        padding-bottom: 1rem;
-        transition: all 0.3s ease;
-      }
-
-      .menu-item:hover {
-        background-color: rgba(255, 255, 255, 0.05);
-        border-radius: 8px;
-        padding-left: 10px;
-      }
-
-      .menu-item:last-child {
-        border-bottom: none;
-      }
-
-      .item-name {
-        font-weight: 700;
-        color: var(--accent-red);
-        font-size: 1.2rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      .item-price {
-        font-weight: 600;
-        color: var(--secondary-color);
-        font-size: 1.2rem;
-        background: rgba(255, 204, 0, 0.1);
-        padding: 2px 8px;
-        border-radius: 20px;
-      }
-
-      .item-description {
-        font-size: 0.95rem;
-        color: rgba(255, 255, 255, 0.9);
-        line-height: 1.5;
-      }
-
-      .drinks-section {
-        display: flex;
-        justify-content: space-around;
-        flex-wrap: wrap;
-        padding: 1.2rem;
-        background-color: rgba(0, 0, 0, 0.2);
-        border-radius: 15px;
-        box-shadow: inset 0 0 10px rgba(255, 102, 0, 0.1);
-      }
-
-      .drink-item {
-        margin: 0.8rem;
-        text-align: center;
-        background: rgba(255, 102, 0, 0.05);
-        padding: 10px 15px;
-        border-radius: 10px;
-        min-width: 150px;
-        transition: all 0.3s ease;
-      }
-
-      .drink-item:hover {
-        transform: scale(1.05);
-        background: rgba(255, 102, 0, 0.1);
-      }
-
-      .footer-note {
-        text-align: center;
-        font-size: 0.8rem;
-        color: rgba(255, 255, 255, 0.7);
-        margin-top: 2rem;
-        padding: 10px;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      /* Floating Order Button */
-      .order-btn {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: linear-gradient(
-          to bottom right,
-          var(--primary-color),
-          var(--accent-red)
-        );
-        color: white;
-        border: none;
-        border-radius: 50px;
-        padding: 15px 25px;
-        font-family: "Nunito", sans-serif;
-        font-weight: 700;
-        font-size: 1.1rem;
-        cursor: pointer;
-        box-shadow: 0 5px 15px rgba(255, 102, 0, 0.4);
-        transition: all 0.3s ease;
-        z-index: 100;
-      }
-
-      .order-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(255, 102, 0, 0.5);
-      }
-
-      .order-btn:active {
-        transform: translateY(1px);
-      }
-
-      /* Replace the existing special-badge CSS with this */
-      .special-badge {
-        position: relative; /* Change from absolute to relative */
-        display: inline-block;
-        background: var(--secondary-color);
-        color: #333;
-        font-size: 0.7rem;
-        padding: 3px 8px;
-        border-radius: 10px;
-        font-weight: 700;
-        margin-left: 10px; /* Add space between name and badge */
-        vertical-align: middle;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        top: -1px; /* Slight adjustment to align better */
-      }
-
-      /* Also update the item-header CSS */
-      .item-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center; /* Changed from baseline to center */
-        margin-bottom: 0.5rem;
-        flex-wrap: wrap;
-      }
-
-      /* Add this if you want the name and badge to stay together */
-      .item-name-wrapper {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-      }
-
-      /* Responsive adjustments */
-      @media (max-width: 768px) {
-        body {
-          padding: 0;
-        }
-
-        .container {
-          padding: 1rem;
-        }
-
-        .flame-logo {
-          max-width: 350px;
-        }
-
-        .flame-text {
-          font-size: 3rem;
-        }
-
-        .number-five {
-          font-size: 4rem;
-        }
-
-        .bull-icon {
-          width: 60px;
-          height: 60px;
-        }
-
-        .bull-icon::before {
-          width: 60px;
-          height: 60px;
-        }
-
-        .bull-icon::after {
-          font-size: 42px;
-          left: 10px;
-        }
-
-        .tagline {
-          font-size: 1.1rem;
-          padding: 8px 20px;
-        }
-
-        .section-title {
-          font-size: 2rem;
-          margin: 1.5rem 0 0.8rem;
-        }
-
-        .menu-section {
-          padding: 1.2rem;
-          margin-bottom: 1.5rem;
-        }
-
-        .item-name,
-        .item-price {
-          font-size: 1.1rem;
-        }
-
-        .order-btn {
-          padding: 12px 20px;
-          font-size: 1rem;
-        }
-      }
-
-      @media (max-width: 480px) {
-        .container {
-          padding: 0.8rem;
-        }
-
-        .flame-logo {
-          max-width: 280px;
-        }
-
-        .flame-text {
-          font-size: 2.3rem;
-        }
-
-        .number-five {
-          font-size: 3rem;
-        }
-
-        .bull-icon {
-          width: 50px;
-          height: 50px;
-          margin-right: 10px;
-        }
-
-        .bull-icon::before {
-          width: 50px;
-          height: 50px;
-        }
-
-        .bull-icon::after {
-          font-size: 34px;
-          left: 8px;
-        }
-
-        .tagline {
-          font-size: 1rem;
-          padding: 6px 15px;
-          letter-spacing: 1px;
-        }
-
-        .section-title {
-          font-size: 1.8rem;
-          margin: 1.2rem 0 0.6rem;
-        }
-
-        .menu-section {
-          padding: 1rem;
-          margin-bottom: 1.2rem;
-          border-radius: 12px;
-        }
-
-        .menu-item {
-          margin-bottom: 1rem;
-          padding-bottom: 0.8rem;
-        }
-
-        .item-header {
-          flex-direction: row;
-          justify-content: space-between;
-          flex-wrap: wrap;
-          gap: 5px;
-        }
-
-        .item-name {
-          font-size: 1rem;
-          flex: 1;
-        }
-
-        .item-price {
-          font-size: 1rem;
-          padding: 1px 6px;
-        }
-
-        .item-description {
-          font-size: 0.85rem;
-          margin-top: 0.3rem;
-        }
-
-        .footer-note {
-          font-size: 0.7rem;
-          margin-top: 1.5rem;
-        }
-
-        .order-btn {
-          padding: 10px 15px;
-          font-size: 0.9rem;
-          bottom: 15px;
-          right: 15px;
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="container">
-      <header>
-        <div class="flame-logo">
-          <div class="bull-icon"></div>
-          <div class="logo-text">
-            <span class="flame-text">Flame</span>
-            <span class="number-five">5</span>
-          </div>
+    <!-- Floating Navigation -->
+    <nav class="floating-nav">
+      <div class="nav-container">
+        <div class="logo-nav">
+          <span class="flame-icon">🔥</span>
+          <span class="logo-text">Flame<span class="logo-number">5</span></span>
         </div>
-        <p class="tagline">FROM THE FLAMES</p>
-      </header>
-
-      <div class="menu-section">
-        <h2 class="section-title">BEYOND THE BURGER</h2>
-
-        <div class="menu-item">
-          <div class="item-header">
-            <h3 class="item-name">Smash</h3>
-            <span class="item-price">11.99</span>
-          </div>
-          <p class="item-description">
-            Bun, 6oz Black Angus Beef, Aged Cheddar, Pickle, Tomato, Lettuce,
-            Cheeto Sauce, Relish
-          </p>
+        <div class="nav-links">
+          <a href="#burgers" class="nav-link">Burgers</a>
+          <a href="#pendu" class="nav-link">Urban Pendu</a>
+          <a href="#toasties" class="nav-link">Toasties</a>
+          <a href="#flame" class="nav-link">From the Flame</a>
+          <a href="#fries" class="nav-link">Fries</a>
+          <a href="#drinks" class="nav-link">Drinks</a>
+          <a href="#contact" class="nav-link">Contact</a>
         </div>
-
-        <div class="menu-item">
-          <div class="item-header">
-            <h3 class="item-name">Cheeto</h3>
-            <span class="item-price">12.50</span>
-          </div>
-          <p class="item-description">
-            Bun, Fried Chicken, Cheddar, Lettuce, Pickle, Tomato, Cheeto Sauce
-          </p>
-        </div>
-
-        <div class="menu-item">
-          <div class="item-header">
-            <div class="item-name-wrapper">
-              <h3 class="item-name">F5 Ranch</h3>
-              <span class="special-badge">POPULAR</span>
-            </div>
-
-            <span class="item-price">13</span>
-          </div>
-          <p class="item-description">
-            Bun, Fried Chicken, Tomato, Lettuce, Smoked Cheese, Pickle, Ranch
-            Aioli
-          </p>
-        </div>
-
-        <div class="menu-item">
-          <div class="item-header">
-            <h3 class="item-name">Lush</h3>
-            <span class="item-price">13.75</span>
-          </div>
-          <p class="item-description">
-            Bun, 6oz Lamb Pattie, Tomato, Lettuce, Pickle, Lush Sauce, Smoked
-            Cheese, Relish
-          </p>
-        </div>
-
-        <div class="menu-item">
-          <div class="item-header">
-            <div class="item-name-wrapper">
-              <h3 class="item-name">F5 Philly Steak</h3>
-              <span class="special-badge">CHEF'S CHOICE</span>
-            </div>
-
-            <span class="item-price">25</span>
-          </div>
-          <p class="item-description">
-            Ciabatta, Black Angus Steak, Cheddar, Sautéed Onion, Tomato,
-            Scallions, Sweet Relish and Philly Sauce
-          </p>
-        </div>
-
-        <div class="menu-item">
-          <div class="item-header">
-            <h3 class="item-name">Flame Fried Chicken</h3>
-            <span class="item-price">13.50</span>
-          </div>
-          <p class="item-description">
-            6 pcs F5 Chicken, Garlic and Chilli Honey, Pickle, F5 Sauce
-          </p>
-        </div>
+        <button class="menu-toggle" id="menuToggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
+    </nav>
 
-      <div class="menu-section">
-        <h2 class="section-title">Fries</h2>
-
-        <div class="menu-item">
-          <div class="item-header">
-            <h3 class="item-name">Fries</h3>
-            <span class="item-price">6</span>
-          </div>
-          <p class="item-description">Thick Cut Fries, Tomato sauce</p>
-        </div>
-
-        <div class="menu-item">
-          <div class="item-header">
-            <div class="item-name-wrapper">
-              <h3 class="item-name">F5 Fries</h3>
-              <span class="special-badge">HOT!</span>
-            </div>
-
-            <span class="item-price">11.99</span>
-          </div>
-          <p class="item-description">
-            Chilli Beans, Cheese sauce, Tomato & Onion Salsa, F5 sauce, Mozz
-            Cheese, Sour Cream
-          </p>
-        </div>
-
-        <div class="menu-item">
-          <div class="item-header">
-            <h3 class="item-name">Lush Fries</h3>
-            <span class="item-price">12.99</span>
-          </div>
-          <p class="item-description">
-            Chicken, Chilli Beans, Cheese Sauce, Tomato & Onion Salsa, F5 sauce,
-            Mozz Cheese, Sour Cream
-          </p>
-        </div>
-
-        <div class="menu-item">
-          <div class="item-header">
-            <h3 class="item-name">Add On Fries</h3>
-            <span class="item-price">3</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-section indian">
-        <h2 class="section-title">Urban Pendu</h2>
-
-        <div class="menu-item">
-          <div class="item-header">
-            <h3 class="item-name">Papdi Chaat</h3>
-            <span class="item-price">7.99</span>
-          </div>
-          <p class="item-description">
-            Papdi, Coriander & Mint Chutney, Tamarind & Date Sauce, Raita, Mango
-            sauce, Potato Stick
-          </p>
-        </div>
-
-        <div class="menu-item">
-          <div class="item-header">
-            <h3 class="item-name">Samosa Chaat</h3>
-            <span class="item-price">8.50</span>
-          </div>
-          <p class="item-description">
-            Samosa, Coriander & Mint Chutney, Tamarind & Date Sauce, Raita,
-            Mango Sauce, Potato Sticks
-          </p>
-        </div>
-
-        <div class="menu-item">
-          <div class="item-header">
-            <h3 class="item-name">Aloo Wala Tikki Chaat</h3>
-            <span class="item-price">12</span>
-          </div>
-          <p class="item-description">
-            Crispy Home-made potato Pattie, Coriander & Mint Chutney, Tamarind &
-            Date Sauce, Raita, Mango sauce, Potato Stick
-          </p>
-        </div>
-
-        <div class="menu-item">
-          <div class="item-header">
-            <div class="item-name-wrapper">
-              <h3 class="item-name">Mirchi Wala Sandwich</h3>
-              <span class="special-badge">SPICY</span>
-            </div>
-
-            <span class="item-price">9.99</span>
-          </div>
-          <p class="item-description">
-            Slice Sandwich Bread, Coriander & Mint Chutney, Green Chilli, Loaded
-            with Cheese
-          </p>
-        </div>
-
-        <div class="menu-item">
-          <div class="item-header">
-            <h3 class="item-name">Bombay Club Sandwich</h3>
-            <span class="item-price">12.50</span>
-          </div>
-          <p class="item-description">
-            Home-made vegetable Pattie, Sliced sandwich bread, Coriander & Mint
-            Chutney, Tomato, Lettuce, Tamarind & Date Sauce
-          </p>
-        </div>
-
-        <div class="menu-item">
-          <div class="item-header">
-            <h3 class="item-name">Pendu Samosa</h3>
-            <span class="item-price">12.99</span>
-          </div>
-          <p class="item-description">
-            Bun, Samosa filling, Coriander & Mint Aioli, Tomato, Lettuce,
-            Tamarind, Date Chutney and Raita Sauce
-          </p>
-        </div>
-
-        <div class="menu-item">
-          <div class="item-header">
-            <h3 class="item-name">Urban Paneer Tikka</h3>
-            <span class="item-price">13.99</span>
-          </div>
-          <p class="item-description">
-            Bun, Tandoori Marinated Paneer, Tikka Mayo, Coriander & Mint Aioli,
-            Lettuce, Tomato, Date & Tamarind Sauce, Onion & Tomato Pickle
-          </p>
-        </div>
-
-        <div class="menu-item">
-          <div class="item-header">
-            <h3 class="item-name">Patiala Chicken Tikka</h3>
-            <span class="item-price">14.99</span>
-          </div>
-          <p class="item-description">
-            Bun, Chicken Tikka Mayo, Coriander & Mint Aioli, Date & Tamarind
-            Sauce, Lettuce, Tomato, Raita Sauce
-          </p>
-        </div>
-
-        <div class="menu-item">
-          <div class="item-header">
-            <div class="item-name-wrapper"></div>
-            <h3 class="item-name">Delhi 6 Butter Chicken</h3>
-            <span class="item-price">15.50</span>
-          </div>
-          <p class="item-description">
-            Bun, Indian Spice Marinated chicken, Butter Chicken Mayo, Coriander
-            Chutney, Date & Tamarind Sauce, Lettuce, Tomato, Raita Sauce
-          </p>
-        </div>
-      </div>
-
-      <div class="menu-section">
-        <h2 class="section-title">Drinks</h2>
-
-        <div class="drinks-section">
-          <div class="drink-item">
-            <div class="item-header">
-              <h3 class="item-name">Coca Cola</h3>
-              <span class="item-price">3</span>
-            </div>
-          </div>
-
-          <div class="drink-item">
-            <div class="item-header">
-              <h3 class="item-name">Flaming Tea</h3>
-              <span class="item-price">4</span>
-            </div>
-            <p class="item-description">2 cup for 6</p>
-          </div>
-
-          <div class="drink-item">
-            <div class="item-header">
-              <h3 class="item-name">Best of Best Rose tea</h3>
-              <span class="item-price">7</span>
-            </div>
-            <p class="item-description">2 cup for 10</p>
-          </div>
-        </div>
-      </div>
-
-      <p class="footer-note">
-        *All Prices are inclusive tax. All items contain gluten & dairy.
-      </p>
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#burgers" class="mobile-link">Burgers</a>
+      <a href="#pendu" class="mobile-link">Urban Pendu</a>
+      <a href="#toasties" class="mobile-link">Toasties</a>
+      <a href="#flame" class="mobile-link">From the Flame</a>
+      <a href="#fries" class="mobile-link">Fries</a>
+      <a href="#drinks" class="mobile-link">Drinks</a>
+      <a href="#contact" class="mobile-link">Contact</a>
     </div>
 
-    <button class="order-btn">Order Now</button>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-bg-animation"></div>
+      <div class="hero-content">
+        <div class="hero-logo">
+          <div class="flame-animation">🔥</div>
+          <h1 class="hero-title">
+            <span class="flame-text">Flame</span>
+            <span class="number-five">5</span>
+          </h1>
+        </div>
+        <p class="hero-subtitle">From The Flames</p>
+        <p class="hero-description">
+          Experience the finest fusion of Indian street food & gourmet burgers
+        </p>
+        <div class="hero-buttons">
+          <a href="#burgers" class="btn btn-primary">Explore Menu</a>
+          <a href="#contact" class="btn btn-secondary">Order Now</a>
+        </div>
+      </div>
+      <div class="scroll-indicator">
+        <span>Scroll to explore</span>
+        <div class="scroll-arrow">↓</div>
+      </div>
+    </section>
 
-    <script>
-      // Simple script to add some interactivity
-      document.addEventListener("DOMContentLoaded", function () {
-        // Make the order button functional
-        const orderBtn = document.querySelector(".order-btn");
-        orderBtn.addEventListener("click", function () {
-          alert(
-            "Thank you for your interest! Please call us at +64 0220232207  to place your order."
-          );
-        });
+    <!-- Quick Navigation - Mobile & Desktop -->
+    <div class="quick-nav-section">
+      <div class="container">
+        <div class="quick-nav-title">Browse Our Menu</div>
+        <div class="quick-nav-grid">
+          <a href="#burgers" class="quick-nav-item">
+            <span class="quick-nav-icon">🍔</span>
+            <span class="quick-nav-label">Beyond Burger</span>
+            <span class="quick-nav-count">9 items</span>
+          </a>
+          <a href="#pendu" class="quick-nav-item">
+            <span class="quick-nav-icon">🌶️</span>
+            <span class="quick-nav-label">Urban Pendu</span>
+            <span class="quick-nav-count">7 items</span>
+          </a>
+          <a href="#toasties" class="quick-nav-item">
+            <span class="quick-nav-icon">🔥</span>
+            <span class="quick-nav-label">Toasties</span>
+            <span class="quick-nav-count">5 items</span>
+          </a>
+          <a href="#flame" class="quick-nav-item">
+            <span class="quick-nav-icon">🍗</span>
+            <span class="quick-nav-label">From Flame</span>
+            <span class="quick-nav-count">3 items</span>
+          </a>
+          <a href="#fries" class="quick-nav-item">
+            <span class="quick-nav-icon">🍟</span>
+            <span class="quick-nav-label">Fries</span>
+            <span class="quick-nav-count">3 items</span>
+          </a>
+          <a href="#drinks" class="quick-nav-item">
+            <span class="quick-nav-icon">🥤</span>
+            <span class="quick-nav-label">Drinks</span>
+            <span class="quick-nav-count">4 items</span>
+          </a>
+        </div>
+      </div>
+    </div>
 
-        // Highlight menu items when scrolled into view
-        const menuItems = document.querySelectorAll(".menu-item");
+    <!-- Beyond Burger Section -->
+    <section id="burgers" class="menu-category">
+      <div class="container">
+        <div class="category-header">
+          <span class="category-icon">🍔</span>
+          <h2 class="category-title">Beyond Burger</h2>
+          <p class="category-subtitle">
+            Gourmet burgers crafted with love & fire
+          </p>
+        </div>
 
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.style.opacity = "1";
-                entry.target.style.transform = "translateX(0)";
-              }
-            });
-          },
-          { threshold: 0.1 }
-        );
+        <div class="menu-grid">
+          <div class="menu-card" data-animation="fade-up">
+            <div class="card-image-placeholder burger-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">Pendu Samosa</h3>
+                <span class="item-price">$12.99</span>
+              </div>
+              <p class="item-description">
+                Burger bun, samosa patty, raita, date sauce, lettuce, tomato,
+                mint aioli, cheese
+              </p>
+            </div>
+          </div>
 
-        menuItems.forEach((item) => {
-          item.style.opacity = "0.7";
-          item.style.transform = "translateX(-10px)";
-          item.style.transition = "all 0.5s ease";
-          observer.observe(item);
-        });
-      });
-    </script>
+          <div class="menu-card" data-animation="fade-up">
+            <div class="card-image-placeholder burger-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">Urban Paneer Tikka</h3>
+                <span class="item-price">$13.99</span>
+              </div>
+              <p class="item-description">
+                Burger bun, paneer, tikka sauce, raita, date sauce, lettuce,
+                tomato, mint aioli, cheese
+              </p>
+            </div>
+          </div>
+
+          <div class="menu-card featured" data-animation="fade-up">
+            <div class="featured-badge">Popular</div>
+            <div class="card-image-placeholder burger-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">Patiala Chicken Tikka</h3>
+                <span class="item-price">$14.99</span>
+              </div>
+              <p class="item-description">
+                Burger bun, fried chicken, tikka sauce, raita, date sauce,
+                lettuce, tomato, mint aioli, cheese
+              </p>
+            </div>
+          </div>
+
+          <div class="menu-card" data-animation="fade-up">
+            <div class="card-image-placeholder burger-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">Delhi 6 Butter Chicken</h3>
+                <span class="item-price">$15.50</span>
+              </div>
+              <p class="item-description">
+                Burger bun, fried chicken, butter chicken sauce, raita, date
+                sauce, lettuce, tomato, mint aioli, cheese
+              </p>
+            </div>
+          </div>
+
+          <div class="menu-card" data-animation="fade-up">
+            <div class="card-image-placeholder burger-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">F5 Ranch</h3>
+                <span class="item-price">$13.00</span>
+              </div>
+              <p class="item-description">
+                Burger bun, fried chicken, ranch sauce, chilli honey, lettuce,
+                gherkin, tomato and cheese
+              </p>
+            </div>
+          </div>
+
+          <div class="menu-card featured" data-animation="fade-up">
+            <div class="featured-badge">Popular</div>
+            <div class="card-image-placeholder burger-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">F5 Cheeto</h3>
+                <span class="item-price">$13.99</span>
+              </div>
+              <p class="item-description">
+                Burger bun, fried chicken, cheeto sauce, chilli honey, lettuce,
+                gherkin, tomato and cheese
+              </p>
+            </div>
+          </div>
+
+          <div class="menu-card" data-animation="fade-up">
+            <div class="card-image-placeholder burger-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">F5 Smash / Double Smash</h3>
+                <span class="item-price">$13.99 / $15.00</span>
+              </div>
+              <p class="item-description">
+                Burger bun, beef mince, onion, lettuce, tomato and cheese
+              </p>
+            </div>
+          </div>
+
+          <div class="menu-card" data-animation="fade-up">
+            <div class="card-image-placeholder burger-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">F5 Angus Cheese Burger</h3>
+                <span class="item-price">$15.99</span>
+              </div>
+              <p class="item-description">
+                Burger bun, steak with onion, cheese, lettuce, tomato
+              </p>
+            </div>
+          </div>
+
+          <div class="menu-card featured" data-animation="fade-up">
+            <div class="featured-badge chef">Chef's Choice</div>
+            <div class="card-image-placeholder burger-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">F5 Philly Steak</h3>
+                <span class="item-price">$23.99</span>
+              </div>
+              <p class="item-description">
+                Burger bun, steak with onion, cheese, lettuce, tomato
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Urban Pendu Section -->
+    <section id="pendu" class="menu-category alt-bg">
+      <div class="container">
+        <div class="category-header">
+          <span class="category-icon">🌶️</span>
+          <h2 class="category-title">Urban Pendu</h2>
+          <p class="category-subtitle">
+            Authentic Indian street food with a modern twist
+          </p>
+        </div>
+
+        <div class="menu-grid">
+          <div class="menu-card" data-animation="fade-up">
+            <div class="card-image-placeholder chaat-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">Papdi Chaat</h3>
+                <span class="item-price">$7.99</span>
+              </div>
+              <p class="item-description">
+                Papdi with raita, mint chutney, tamarind chutney, mango sauce
+                and aloo bhujia
+              </p>
+            </div>
+          </div>
+
+          <div class="menu-card" data-animation="fade-up">
+            <div class="card-image-placeholder chaat-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">Samosa Chaat</h3>
+                <span class="item-price">$8.50</span>
+              </div>
+              <p class="item-description">
+                Samosa with raita, mint chutney, tamarind chutney, mango sauce
+                and aloo bhujia
+              </p>
+            </div>
+          </div>
+
+          <div class="menu-card" data-animation="fade-up">
+            <div class="card-image-placeholder chaat-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">Paani Puri</h3>
+                <span class="item-price">$7.99</span>
+              </div>
+              <p class="item-description">
+                8 pc paani puri served with spicy potato filling
+              </p>
+            </div>
+          </div>
+
+          <div class="menu-card" data-animation="fade-up">
+            <div class="card-image-placeholder chaat-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">Sev Puri</h3>
+                <span class="item-price">$9.99</span>
+              </div>
+              <p class="item-description">
+                8 pc puri with coriander chutney, tamarind and mango sauce,
+                chopped onion, chilli and sev
+              </p>
+            </div>
+          </div>
+
+          <div class="menu-card" data-animation="fade-up">
+            <div class="card-image-placeholder chaat-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">Dahi Puri</h3>
+                <span class="item-price">$10.99</span>
+              </div>
+              <p class="item-description">
+                8 pc puri with potato, yoghurt, coriander chutney, tamarind and
+                mango sauce, chopped onion, chilli
+              </p>
+            </div>
+          </div>
+
+          <div class="menu-card" data-animation="fade-up">
+            <div class="card-image-placeholder chaat-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">Aloo Tikki Chaat</h3>
+                <span class="item-price">$12.00</span>
+              </div>
+              <p class="item-description">
+                Potato patty, raita, coriander chutney, tamarind and mango
+                sauce, chopped onion, chilli
+              </p>
+            </div>
+          </div>
+
+          <div class="menu-card" data-animation="fade-up">
+            <div class="card-image-placeholder chaat-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">Vada Pav</h3>
+                <span class="item-price">$11.99</span>
+              </div>
+              <p class="item-description">
+                2 pc vada pav with coriander chutney, coconut chutney, fried
+                green chilli
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Toasties Section -->
+    <section id="toasties" class="menu-category">
+      <div class="container">
+        <div class="category-header">
+          <span class="category-icon">🔥</span>
+          <h2 class="category-title">Toasties</h2>
+          <p class="category-subtitle">
+            Crispy, melty, and absolutely delicious
+          </p>
+        </div>
+
+        <div class="menu-grid">
+          <div class="menu-card" data-animation="fade-up">
+            <div class="card-image-placeholder toastie-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">Cheese Chilli Toastie</h3>
+                <span class="item-price">$9.99</span>
+              </div>
+              <p class="item-description">
+                Triple decker toastie with green chilli and cheese
+              </p>
+            </div>
+          </div>
+
+          <div class="menu-card" data-animation="fade-up">
+            <div class="card-image-placeholder toastie-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">Bombay Club Toastie</h3>
+                <span class="item-price">$12.99</span>
+              </div>
+              <p class="item-description">
+                Triple decker toastie with crispy, mint aioli, potato patty,
+                lettuce, tomato, cheese
+              </p>
+            </div>
+          </div>
+
+          <div class="menu-card featured" data-animation="fade-up">
+            <div class="featured-badge">Popular</div>
+            <div class="card-image-placeholder toastie-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">Bollywood Crispy</h3>
+                <span class="item-price">$12.99</span>
+              </div>
+              <p class="item-description">
+                Crispy flaky paratha, crispy chicken, vindaloo aioli, sour
+                cream, pickled onion, mango chutney
+              </p>
+            </div>
+          </div>
+
+          <div class="menu-card" data-animation="fade-up">
+            <div class="card-image-placeholder toastie-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">Paneer Tikka</h3>
+                <span class="item-price">$14.99</span>
+              </div>
+              <p class="item-description">
+                Triple decker toastie with paneer, tikka sauce, lettuce, tomato,
+                cheese
+              </p>
+            </div>
+          </div>
+
+          <div class="menu-card" data-animation="fade-up">
+            <div class="card-image-placeholder toastie-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">Chicken Tikka</h3>
+                <span class="item-price">$15.99</span>
+              </div>
+              <p class="item-description">
+                Triple decker toastie with chicken, tikka sauce, lettuce,
+                tomato, cheese
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- From the Flame Section -->
+    <section id="flame" class="menu-category alt-bg">
+      <div class="container">
+        <div class="category-header">
+          <span class="category-icon">🍗</span>
+          <h2 class="category-title">From the Flame</h2>
+          <p class="category-subtitle">Hot, crispy, and bursting with flavor</p>
+        </div>
+
+        <div class="menu-grid">
+          <div class="menu-card featured" data-animation="fade-up">
+            <div class="featured-badge hot">Hot!</div>
+            <div class="card-image-placeholder chicken-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">Flame Fried Chicken</h3>
+                <span class="item-price">$17.00</span>
+              </div>
+              <p class="item-description">
+                6 pcs fried chicken, chilli honey, cheeto sauce, gherkin
+              </p>
+            </div>
+          </div>
+
+          <div class="menu-card" data-animation="fade-up">
+            <div class="card-image-placeholder momo-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">Steamed Mo: Mo:</h3>
+                <span class="item-price">$13.00</span>
+              </div>
+              <p class="item-description">
+                8 pcs chicken OR veg filling with roasted tomato achar
+              </p>
+            </div>
+          </div>
+
+          <div class="menu-card" data-animation="fade-up">
+            <div class="card-image-placeholder momo-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">Crispy Mo: Mo:</h3>
+                <span class="item-price">$15.99</span>
+              </div>
+              <p class="item-description">
+                8 pcs fried momo, tossed in tikka sauce
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lord of the Fries Section -->
+    <section id="fries" class="menu-category">
+      <div class="container">
+        <div class="category-header">
+          <span class="category-icon">🍟</span>
+          <h2 class="category-title">Lord of the Fries</h2>
+          <p class="category-subtitle">Loaded, crispy, and irresistible</p>
+        </div>
+
+        <div class="menu-grid">
+          <div class="menu-card" data-animation="fade-up">
+            <div class="card-image-placeholder fries-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">Fries</h3>
+                <span class="item-price">$6.00</span>
+              </div>
+              <p class="item-description">Classic crispy fries</p>
+            </div>
+          </div>
+
+          <div class="menu-card featured" data-animation="fade-up">
+            <div class="featured-badge hot">Hot!</div>
+            <div class="card-image-placeholder loaded-fries-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">F5 Fries</h3>
+                <span class="item-price">$12.99</span>
+              </div>
+              <p class="item-description">
+                Choose any sauce: Cheeto, Butter Chicken, Tikka<br />Loaded
+                cheesy fries with kidney beans, cheese sauce, sour cream,
+                mozzarella
+              </p>
+            </div>
+          </div>
+
+          <div class="menu-card" data-animation="fade-up">
+            <div class="card-image-placeholder loaded-fries-img"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3 class="item-name">Lush Fries</h3>
+                <span class="item-price">$15.99</span>
+              </div>
+              <p class="item-description">
+                Choose any sauce: Cheeto, Butter Chicken, Tikka<br />Loaded
+                cheesy fries with chicken, kidney beans, cheese sauce, sour
+                cream, mozzarella
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Beverage Section -->
+    <section id="drinks" class="menu-category alt-bg">
+      <div class="container">
+        <div class="category-header">
+          <span class="category-icon">🥤</span>
+          <h2 class="category-title">Beverage</h2>
+          <p class="category-subtitle">Refresh & rejuvenate</p>
+        </div>
+
+        <div class="drinks-showcase">
+          <div class="drink-card-special" data-animation="fade-up">
+            <div class="drink-icon">🥤</div>
+            <h3>Coke / Fanta</h3>
+            <p class="drink-price">$3.00</p>
+          </div>
+
+          <div class="drink-card-special" data-animation="fade-up">
+            <div class="drink-icon">🍋</div>
+            <h3>L&P</h3>
+            <p class="drink-price">$4.00</p>
+          </div>
+
+          <div class="drink-card-special" data-animation="fade-up">
+            <div class="drink-icon">☕</div>
+            <h3>Flaming Tea</h3>
+            <p class="drink-description">
+              Milk tea with cardamom, ginger, tea masala
+            </p>
+            <p class="drink-price">$4.00</p>
+          </div>
+
+          <div class="drink-card-special" data-animation="fade-up">
+            <div class="drink-icon">🌹</div>
+            <h3>Rose Tea</h3>
+            <p class="drink-description">
+              Milk tea with dried rose leaves, nuts
+            </p>
+            <p class="drink-price">$7.00</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Meal Deal Section -->
+    <section class="meal-deal-section">
+      <div class="container">
+        <div class="category-header">
+          <span class="category-icon">🎯</span>
+          <h2 class="category-title">Meal Deals</h2>
+          <p class="category-subtitle">
+            Best value combos for the hungry souls
+          </p>
+        </div>
+
+        <div class="deal-cards">
+          <div class="deal-card" data-animation="fade-up">
+            <div class="deal-badge">Best Value</div>
+            <h3>Any Burger Combo</h3>
+            <p class="deal-includes">Choose any burger + Fries + Cold Drink</p>
+            <p class="deal-note">
+              *Philly Steak Burger is not included in this deal
+            </p>
+            <p class="deal-price">$19.99</p>
+          </div>
+
+          <div class="deal-card premium" data-animation="fade-up">
+            <div class="deal-badge premium">Premium</div>
+            <h3>Philly Steak Combo</h3>
+            <p class="deal-includes">F5 Philly Steak + Fries + Cold Drink</p>
+            <p class="deal-price">$29.99</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+      <div class="container">
+        <div class="contact-content">
+          <div class="contact-info-box" data-animation="fade-up">
+            <h2>Visit Us</h2>
+            <div class="contact-item">
+              <span class="contact-icon">📍</span>
+              <div>
+                <p class="contact-label">Location</p>
+                <p class="contact-value">
+                  328 Tuam Street, CBD<br />Christchurch
+                </p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <span class="contact-icon">📞</span>
+              <div>
+                <p class="contact-label">Phone</p>
+                <p class="contact-value">
+                  <a href="tel:+6422354451">+64 224354451</a>
+                </p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <span class="contact-icon">🌐</span>
+              <div>
+                <p class="contact-label">Website</p>
+                <p class="contact-value">
+                  <a href="https://flame5.co" target="_blank">flame5.co</a>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-cta" data-animation="fade-up">
+            <h3>Ready to Order?</h3>
+            <p>Call us now to place your order or visit our food truck!</p>
+            <a href="tel:+6422354451" class="btn btn-primary large">Call Now</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <span class="flame-icon">🔥</span>
+            <span>Flame<span class="logo-number">5</span></span>
+          </div>
+          <p class="footer-text">
+            *All prices are inclusive of tax. All items contain gluten & dairy.
+          </p>
+          <p class="footer-copyright">© 2026 Flame 5. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Floating Order Button -->
+    <a href="tel:+6422354451" class="floating-order-btn">
+      <span class="btn-icon">🔥</span>
+      <span class="btn-text">Order Now</span>
+    </a>
+
+    <script src="script.js"></script>
   </body>
 </html>
