@@ -11,6 +11,10 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
   </head>
   <body>
     <!-- Floating Navigation -->
@@ -136,6 +140,10 @@
                 Burger bun, samosa patty, raita, date sauce, lettuce, tomato,
                 mint aioli, cheese
               </p>
+              <button class="add-to-cart-btn" data-name="Pendu Samosa" data-price="12.99" data-category="Beyond Burger">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
 
@@ -150,6 +158,10 @@
                 Burger bun, paneer, tikka sauce, raita, date sauce, lettuce,
                 tomato, mint aioli, cheese
               </p>
+              <button class="add-to-cart-btn" data-name="Urban Paneer Tikka" data-price="13.99" data-category="Beyond Burger">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
 
@@ -165,6 +177,10 @@
                 Burger bun, fried chicken, tikka sauce, raita, date sauce,
                 lettuce, tomato, mint aioli, cheese
               </p>
+              <button class="add-to-cart-btn" data-name="Patiala Chicken Tikka" data-price="14.99" data-category="Beyond Burger">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
 
@@ -179,6 +195,10 @@
                 Burger bun, fried chicken, butter chicken sauce, raita, date
                 sauce, lettuce, tomato, mint aioli, cheese
               </p>
+              <button class="add-to-cart-btn" data-name="Delhi 6 Butter Chicken" data-price="15.50" data-category="Beyond Burger">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
 
@@ -193,6 +213,10 @@
                 Burger bun, fried chicken, ranch sauce, chilli honey, lettuce,
                 gherkin, tomato and cheese
               </p>
+              <button class="add-to-cart-btn" data-name="F5 Ranch" data-price="13.00" data-category="Beyond Burger">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
 
@@ -208,6 +232,10 @@
                 Burger bun, fried chicken, cheeto sauce, chilli honey, lettuce,
                 gherkin, tomato and cheese
               </p>
+              <button class="add-to-cart-btn" data-name="F5 Cheeto" data-price="13.99" data-category="Beyond Burger">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
 
@@ -221,6 +249,10 @@
               <p class="item-description">
                 Burger bun, beef mince, onion, lettuce, tomato and cheese
               </p>
+              <button class="add-to-cart-btn" data-name="F5 Smash / Double Smash" data-price="13.99" data-category="Beyond Burger">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
 
@@ -234,6 +266,10 @@
               <p class="item-description">
                 Burger bun, steak with onion, cheese, lettuce, tomato
               </p>
+              <button class="add-to-cart-btn" data-name="F5 Angus Cheese Burger" data-price="15.99" data-category="Beyond Burger">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
 
@@ -248,6 +284,10 @@
               <p class="item-description">
                 Burger bun, steak with onion, cheese, lettuce, tomato
               </p>
+              <button class="add-to-cart-btn" data-name="F5 Philly Steak" data-price="23.99" data-category="Beyond Burger">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
         </div>
@@ -277,6 +317,10 @@
                 Papdi with raita, mint chutney, tamarind chutney, mango sauce
                 and aloo bhujia
               </p>
+              <button class="add-to-cart-btn" data-name="Papdi Chaat" data-price="7.99" data-category="Urban Pendu">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
 
@@ -291,6 +335,10 @@
                 Samosa with raita, mint chutney, tamarind chutney, mango sauce
                 and aloo bhujia
               </p>
+              <button class="add-to-cart-btn" data-name="Samosa Chaat" data-price="8.50" data-category="Urban Pendu">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
 
@@ -304,6 +352,10 @@
               <p class="item-description">
                 8 pc paani puri served with spicy potato filling
               </p>
+              <button class="add-to-cart-btn" data-name="Paani Puri" data-price="7.99" data-category="Urban Pendu">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
 
@@ -318,6 +370,10 @@
                 8 pc puri with coriander chutney, tamarind and mango sauce,
                 chopped onion, chilli and sev
               </p>
+              <button class="add-to-cart-btn" data-name="Sev Puri" data-price="9.99" data-category="Urban Pendu">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
 
@@ -332,6 +388,10 @@
                 8 pc puri with potato, yoghurt, coriander chutney, tamarind and
                 mango sauce, chopped onion, chilli
               </p>
+              <button class="add-to-cart-btn" data-name="Dahi Puri" data-price="10.99" data-category="Urban Pendu">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
 
@@ -346,6 +406,10 @@
                 Potato patty, raita, coriander chutney, tamarind and mango
                 sauce, chopped onion, chilli
               </p>
+              <button class="add-to-cart-btn" data-name="Aloo Tikki Chaat" data-price="12.00" data-category="Urban Pendu">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
 
@@ -360,6 +424,10 @@
                 2 pc vada pav with coriander chutney, coconut chutney, fried
                 green chilli
               </p>
+              <button class="add-to-cart-btn" data-name="Vada Pav" data-price="11.99" data-category="Urban Pendu">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
         </div>
@@ -388,6 +456,10 @@
               <p class="item-description">
                 Triple decker toastie with green chilli and cheese
               </p>
+              <button class="add-to-cart-btn" data-name="Cheese Chilli Toastie" data-price="9.99" data-category="Toasties">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
 
@@ -402,6 +474,10 @@
                 Triple decker toastie with crispy, mint aioli, potato patty,
                 lettuce, tomato, cheese
               </p>
+              <button class="add-to-cart-btn" data-name="Bombay Club Toastie" data-price="12.99" data-category="Toasties">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
 
@@ -417,6 +493,10 @@
                 Crispy flaky paratha, crispy chicken, vindaloo aioli, sour
                 cream, pickled onion, mango chutney
               </p>
+              <button class="add-to-cart-btn" data-name="Bollywood Crispy" data-price="12.99" data-category="Toasties">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
 
@@ -431,6 +511,10 @@
                 Triple decker toastie with paneer, tikka sauce, lettuce, tomato,
                 cheese
               </p>
+              <button class="add-to-cart-btn" data-name="Paneer Tikka" data-price="14.99" data-category="Toasties">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
 
@@ -445,6 +529,10 @@
                 Triple decker toastie with chicken, tikka sauce, lettuce,
                 tomato, cheese
               </p>
+              <button class="add-to-cart-btn" data-name="Chicken Tikka" data-price="15.99" data-category="Toasties">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
         </div>
@@ -472,6 +560,10 @@
               <p class="item-description">
                 6 pcs fried chicken, chilli honey, cheeto sauce, gherkin
               </p>
+              <button class="add-to-cart-btn" data-name="Flame Fried Chicken" data-price="17.00" data-category="From the Flame">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
 
@@ -485,6 +577,10 @@
               <p class="item-description">
                 8 pcs chicken OR veg filling with roasted tomato achar
               </p>
+              <button class="add-to-cart-btn" data-name="Steamed Mo: Mo:" data-price="13.00" data-category="From the Flame">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
 
@@ -498,6 +594,10 @@
               <p class="item-description">
                 8 pcs fried momo, tossed in tikka sauce
               </p>
+              <button class="add-to-cart-btn" data-name="Crispy Mo: Mo:" data-price="15.99" data-category="From the Flame">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
         </div>
@@ -522,6 +622,10 @@
                 <span class="item-price">$6.00</span>
               </div>
               <p class="item-description">Classic crispy fries</p>
+              <button class="add-to-cart-btn" data-name="Fries" data-price="6.00" data-category="Lord of the Fries">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
 
@@ -538,6 +642,10 @@
                 cheesy fries with kidney beans, cheese sauce, sour cream,
                 mozzarella
               </p>
+              <button class="add-to-cart-btn" data-name="F5 Fries" data-price="12.99" data-category="Lord of the Fries">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
 
@@ -553,6 +661,10 @@
                 cheesy fries with chicken, kidney beans, cheese sauce, sour
                 cream, mozzarella
               </p>
+              <button class="add-to-cart-btn" data-name="Lush Fries" data-price="15.99" data-category="Lord of the Fries">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Add to Cart</span>
+              </button>
             </div>
           </div>
         </div>
@@ -573,12 +685,20 @@
             <div class="drink-icon">🥤</div>
             <h3>Coke / Fanta</h3>
             <p class="drink-price">$3.00</p>
+            <button class="add-to-cart-btn drink-cart-btn" data-name="Coke / Fanta" data-price="3.00" data-category="Beverage">
+              <span class="cart-icon">🛒</span>
+              <span class="cart-text">Add to Cart</span>
+            </button>
           </div>
 
           <div class="drink-card-special" data-animation="fade-up">
             <div class="drink-icon">🍋</div>
             <h3>L&P</h3>
             <p class="drink-price">$4.00</p>
+            <button class="add-to-cart-btn drink-cart-btn" data-name="L&P" data-price="4.00" data-category="Beverage">
+              <span class="cart-icon">🛒</span>
+              <span class="cart-text">Add to Cart</span>
+            </button>
           </div>
 
           <div class="drink-card-special" data-animation="fade-up">
@@ -588,6 +708,10 @@
               Milk tea with cardamom, ginger, tea masala
             </p>
             <p class="drink-price">$4.00</p>
+            <button class="add-to-cart-btn drink-cart-btn" data-name="Flaming Tea" data-price="4.00" data-category="Beverage">
+              <span class="cart-icon">🛒</span>
+              <span class="cart-text">Add to Cart</span>
+            </button>
           </div>
 
           <div class="drink-card-special" data-animation="fade-up">
@@ -597,6 +721,10 @@
               Milk tea with dried rose leaves, nuts
             </p>
             <p class="drink-price">$7.00</p>
+            <button class="add-to-cart-btn drink-cart-btn" data-name="Rose Tea" data-price="7.00" data-category="Beverage">
+              <span class="cart-icon">🛒</span>
+              <span class="cart-text">Add to Cart</span>
+            </button>
           </div>
         </div>
       </div>
@@ -694,11 +822,83 @@
       </div>
     </footer>
 
-    <!-- Floating Order Button -->
-    <a href="tel:+6422354451" class="floating-order-btn">
-      <span class="btn-icon">🔥</span>
-      <span class="btn-text">Order Now</span>
-    </a>
+    <!-- Floating Cart Button -->
+    <div class="floating-cart-btn" id="floatingCart">
+      <span class="cart-badge" id="cartBadge">0</span>
+      <span class="cart-icon-large">🛒</span>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cartModal">
+      <div class="cart-modal-content">
+        <div class="cart-header">
+          <h2>Your Cart</h2>
+          <button class="close-cart" id="closeCart">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+          <!-- Cart items will be dynamically added here -->
+        </div>
+        <div class="cart-footer">
+          <div class="cart-total">
+            <span>Total:</span>
+            <span class="total-amount" id="totalAmount">$0.00</span>
+          </div>
+          <button class="btn btn-primary checkout-btn" id="checkoutBtn">Proceed to Checkout</button>
+          <button class="btn btn-secondary clear-cart-btn" id="clearCartBtn">Clear Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="checkout-modal" id="checkoutModal">
+      <div class="checkout-modal-content">
+        <div class="checkout-header">
+          <h2>Complete Your Order</h2>
+          <button class="close-checkout" id="closeCheckout">&times;</button>
+        </div>
+        <div class="checkout-body">
+          <div class="checkout-step" id="step1">
+            <h3>Enter Your Phone Number</h3>
+            <p>We'll send you a verification code to confirm your order.</p>
+            <div class="phone-input-group">
+              <input type="tel" id="phoneNumber" class="phone-input" placeholder="+64 21 234 5678" />
+              <button class="btn btn-primary" id="sendOtpBtn">Send Code</button>
+            </div>
+          </div>
+          <div class="checkout-step hidden" id="step2">
+            <h3>Enter Verification Code</h3>
+            <p>We've sent a 6-digit code to <span id="displayPhone"></span></p>
+            <div class="otp-input-group">
+              <input type="text" maxlength="6" id="otpCode" class="otp-input" placeholder="123456" />
+              <button class="btn btn-primary" id="verifyOtpBtn">Verify Code</button>
+            </div>
+            <button class="btn-link resend-link" id="resendOtp">Resend Code</button>
+          </div>
+          <div class="checkout-step hidden" id="step3">
+            <h3>Order Summary</h3>
+            <div class="order-summary" id="orderSummary">
+              <!-- Order details will be shown here -->
+            </div>
+            <div class="pickup-info">
+              <h4>📍 Pickup Location</h4>
+              <p>328 Tuam Street, CBD<br />Christchurch</p>
+              <p class="pickup-time">Estimated pickup: <strong>20-25 minutes</strong></p>
+            </div>
+            <button class="btn btn-primary large" id="confirmOrderBtn">Confirm Order</button>
+          </div>
+          <div class="checkout-step hidden" id="step4">
+            <div class="success-animation">✅</div>
+            <h3>Order Confirmed!</h3>
+            <p>Your order has been received.</p>
+            <div class="order-number">
+              Order #<span id="orderNumber"></span>
+            </div>
+            <p>We'll start preparing your order right away. See you soon!</p>
+            <button class="btn btn-primary" id="closeSuccessBtn">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script src="script.js"></script>
   </body>

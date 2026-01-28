@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flame 5 - Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <style>
+        :root {
+            --primary-orange: #ff6600;
+            --primary-red: #ff3300;
+            --accent-yellow: #ffcc00;
+            --dark-bg: #0a0a0a;
+            --dark-card: #1a1a1a;
+            --light-text: #ffffff;
+            --gray-text: #b0b0b0;
+            --gradient-fire: linear-gradient(135deg, #ff6600 0%, #ff3300 100%);
+            --gradient-gold: linear-gradient(135deg, #ffcc00 0%, #ff9900 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--dark-bg);
+            color: var(--light-text);
+            min-height: 100vh;
+        }
+
+        /* Login Screen */
+        .login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .login-box {
+            background: var(--dark-card);
+            border: 2px solid rgba(255, 102, 0, 0.3);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .login-logo {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .login-title {
+            font-size: 1.8rem;
+            background: var(--gradient-fire);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 102, 0, 0.2);
+            border-radius: 10px;
+            color: var(--light-text);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .login-input:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--gradient-fire);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 102, 0, 0.4);
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .header {
+            background: var(--dark-card);
+            padding: 1.5rem 2rem;
+            border-bottom: 2px solid rgba(255, 102, 0, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .header-logo span:first-child {
+            font-size: 2rem;
+        }
+
+        .logo-text {
+            background: var(--gradient-fire);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .refresh-btn, .logout-btn {
+            padding: 0.7rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .refresh-btn {
+            background: rgba(255, 102, 0, 0.2);
+            border: 2px solid var(--primary-orange);
+            color: var(--primary-orange);
+        }
+
+        .refresh-btn:hover {
+            background: var(--primary-orange);
+            color: white;
+        }
+
+        .logout-btn {
+            background: rgba(255, 0, 0, 0.2);
+            border: 2px solid #ff3333;
+            color: #ff3333;
+        }
+
+        .logout-btn:hover {
+            background: #ff3333;
+            color: white;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+        }
+
+        .stat-card {
+            background: var(--dark-card);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-number.pending { color: var(--accent-yellow); }
+        .stat-number.preparing { color: var(--primary-orange); }
+        .stat-number.ready { color: #00cc66; }
+        .stat-number.total {
+            background: var(--gradient-fire);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: var(--gray-text);
+            font-size: 0.9rem;
+        }
+
+        /* Orders Container */
+        .orders-container {
+            padding: 0 2rem 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .orders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Order Card */
+        .order-card {
+            background: var(--dark-card);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
+        }
+
+        .order-card:hover {
+            border-color: rgba(255, 102, 0, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .order-card.pending { border-left: 4px solid var(--accent-yellow); }
+        .order-card.preparing { border-left: 4px solid var(--primary-orange); }
+        .order-card.ready { border-left: 4px solid #00cc66; }
+        .order-card.completed { border-left: 4px solid var(--gray-text); opacity: 0.7; }
+
+        .order-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .order-number {
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        .order-status {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .order-status.pending {
+            background: rgba(255, 204, 0, 0.2);
+            color: var(--accent-yellow);
+        }
+
+        .order-status.preparing {
+            background: rgba(255, 102, 0, 0.2);
+            color: var(--primary-orange);
+        }
+
+        .order-status.ready {
+            background: rgba(0, 204, 102, 0.2);
+            color: #00cc66;
+        }
+
+        .order-status.completed {
+            background: rgba(176, 176, 176, 0.2);
+            color: var(--gray-text);
+        }
+
+        .order-body {
+            padding: 1.5rem;
+        }
+
+        .order-phone {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-text);
+            margin-bottom: 1rem;
+        }
+
+        .order-items {
+            margin-bottom: 1rem;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            font-weight: 600;
+        }
+
+        .item-qty {
+            color: var(--gray-text);
+            font-size: 0.9rem;
+        }
+
+        .item-price {
+            color: var(--accent-yellow);
+            font-weight: 600;
+        }
+
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 2px solid rgba(255, 102, 0, 0.3);
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        .order-total .total-amount {
+            color: var(--accent-yellow);
+        }
+
+        .order-time {
+            color: var(--gray-text);
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+
+        .order-actions {
+            padding: 1rem 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-btn.preparing-btn {
+            background: rgba(255, 102, 0, 0.2);
+            color: var(--primary-orange);
+            border: 1px solid var(--primary-orange);
+        }
+
+        .action-btn.preparing-btn:hover {
+            background: var(--primary-orange);
+            color: white;
+        }
+
+        .action-btn.ready-btn {
+            background: rgba(0, 204, 102, 0.2);
+            color: #00cc66;
+            border: 1px solid #00cc66;
+        }
+
+        .action-btn.ready-btn:hover {
+            background: #00cc66;
+            color: white;
+        }
+
+        .action-btn.complete-btn {
+            background: rgba(176, 176, 176, 0.2);
+            color: var(--gray-text);
+            border: 1px solid var(--gray-text);
+        }
+
+        .action-btn.complete-btn:hover {
+            background: var(--gray-text);
+            color: var(--dark-bg);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--gray-text);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Audio notification */
+        .notification-sound {
+            display: none;
+        }
+
+        /* New order highlight */
+        .order-card.new-order {
+            animation: newOrderPulse 1s ease-in-out 3;
+        }
+
+        @keyframes newOrderPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 102, 0, 0); }
+            50% { box-shadow: 0 0 30px 10px rgba(255, 102, 0, 0.5); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .orders-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .order-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-box">
+            <div class="login-logo">🔥</div>
+            <h1 class="login-title">Admin Dashboard</h1>
+            <input type="password" class="login-input" id="adminPassword" placeholder="Enter Admin Password">
+            <button class="login-btn" id="loginBtn">Login</button>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <header class="header">
+            <div class="header-logo">
+                <span>🔥</span>
+                <span class="logo-text">Flame5</span>
+                <span style="color: var(--gray-text); font-weight: 400;"> Admin</span>
+            </div>
+            <div class="header-actions">
+                <button class="refresh-btn" id="refreshBtn">🔄 Refresh</button>
+                <button class="logout-btn" id="logoutBtn">Logout</button>
+            </div>
+        </header>
+
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-number pending" id="pendingCount">0</div>
+                <div class="stat-label">Pending Orders</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number preparing" id="preparingCount">0</div>
+                <div class="stat-label">Preparing</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number ready" id="readyCount">0</div>
+                <div class="stat-label">Ready for Pickup</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number total" id="todayTotal">$0.00</div>
+                <div class="stat-label">Today's Revenue</div>
+            </div>
+        </div>
+
+        <div class="orders-container">
+            <h2 class="section-title">📋 Active Orders</h2>
+            <div class="orders-grid" id="ordersGrid">
+                <!-- Orders will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio for new order notification -->
+    <audio id="notificationSound" preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAzLELqijT7vg2p0jMqxim0tforocB5uyU",
+            authDomain: "flame5-orders.firebaseapp.com",
+            projectId: "flame5-orders",
+            storageBucket: "flame5-orders.firebasestorage.app",
+            messagingSenderId: "1073281350654",
+            appId: "1:1073281350654:web:943e1163e021747e00deaf",
+            measurementId: "G-YK2E62FND4"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Admin password - CHANGE THIS to your own secure password!
+        const ADMIN_PASSWORD = 'Flame5@2024';
+
+        // DOM Elements
+        const loginScreen = document.getElementById('loginScreen');
+        const dashboard = document.getElementById('dashboard');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const adminPassword = document.getElementById('adminPassword');
+        const ordersGrid = document.getElementById('ordersGrid');
+        const notificationSound = document.getElementById('notificationSound');
+
+        // Track known orders for new order detection
+        let knownOrderIds = new Set();
+        let isFirstLoad = true;
+
+        // Check if already logged in
+        if (localStorage.getItem('flame5AdminAuth') === 'true') {
+            showDashboard();
+        }
+
+        // Login
+        loginBtn.addEventListener('click', () => {
+            if (adminPassword.value === ADMIN_PASSWORD) {
+                localStorage.setItem('flame5AdminAuth', 'true');
+                showDashboard();
+            } else {
+                alert('Invalid password');
+                adminPassword.value = '';
+            }
+        });
+
+        adminPassword.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') loginBtn.click();
+        });
+
+        // Logout
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('flame5AdminAuth');
+            location.reload();
+        });
+
+        // Refresh
+        refreshBtn.addEventListener('click', loadOrders);
+
+        function showDashboard() {
+            loginScreen.style.display = 'none';
+            dashboard.classList.add('active');
+            loadOrders();
+            // Set up real-time listener
+            setupRealtimeListener();
+        }
+
+        // Load orders from Firestore
+        async function loadOrders() {
+            try {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                const snapshot = await db.collection('orders')
+                    .orderBy('timestamp', 'desc')
+                    .limit(50)
+                    .get();
+
+                const orders = [];
+                snapshot.forEach(doc => {
+                    orders.push({ id: doc.id, ...doc.data() });
+                });
+
+                renderOrders(orders);
+                updateStats(orders);
+
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                ordersGrid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">⚠️</div>
+                        <p>Error loading orders. Please refresh.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Real-time listener for new orders
+        function setupRealtimeListener() {
+            db.collection('orders')
+                .orderBy('timestamp', 'desc')
+                .limit(50)
+                .onSnapshot((snapshot) => {
+                    const orders = [];
+                    const newOrders = [];
+
+                    snapshot.forEach(doc => {
+                        const order = { id: doc.id, ...doc.data() };
+                        orders.push(order);
+
+                        // Check for new orders
+                        if (!knownOrderIds.has(doc.id) && !isFirstLoad) {
+                            newOrders.push(doc.id);
+                        }
+                        knownOrderIds.add(doc.id);
+                    });
+
+                    // Play sound for new orders
+                    if (newOrders.length > 0 && !isFirstLoad) {
+                        playNotificationSound();
+                    }
+
+                    isFirstLoad = false;
+                    renderOrders(orders, newOrders);
+                    updateStats(orders);
+                });
+        }
+
+        function playNotificationSound() {
+            try {
+                notificationSound.currentTime = 0;
+                notificationSound.play();
+            } catch (e) {
+                console.log('Could not play notification sound');
+            }
+        }
+
+        function renderOrders(orders, newOrderIds = []) {
+            const activeOrders = orders.filter(o => o.status !== 'completed');
+
+            if (activeOrders.length === 0) {
+                ordersGrid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🎉</div>
+                        <p>No active orders right now!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            ordersGrid.innerHTML = activeOrders.map(order => {
+                const isNew = newOrderIds.includes(order.id);
+                const timestamp = order.timestamp ? order.timestamp.toDate() : new Date(order.createdAt);
+                const timeStr = timestamp.toLocaleTimeString('en-NZ', { hour: '2-digit', minute: '2-digit' });
+                const dateStr = timestamp.toLocaleDateString('en-NZ');
+
+                return `
+                    <div class="order-card ${order.status} ${isNew ? 'new-order' : ''}" data-id="${order.id}">
+                        <div class="order-header">
+                            <div class="order-number">#${order.orderNumber}</div>
+                            <div class="order-status ${order.status}">${order.status}</div>
+                        </div>
+                        <div class="order-body">
+                            <div class="order-phone">
+                                📱 ${order.phone}
+                            </div>
+                            <div class="order-items">
+                                ${order.items.map(item => `
+                                    <div class="order-item">
+                                        <div>
+                                            <span class="item-name">${item.name}</span>
+                                            <span class="item-qty">x${item.quantity}</span>
+                                        </div>
+                                        <span class="item-price">$${(item.price * item.quantity).toFixed(2)}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="order-total">
+                                <span>Total</span>
+                                <span class="total-amount">$${order.total.toFixed(2)}</span>
+                            </div>
+                            <div class="order-time">
+                                🕐 ${timeStr} - ${dateStr}
+                            </div>
+                        </div>
+                        <div class="order-actions">
+                            ${getActionButtons(order)}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Add event listeners for action buttons
+            document.querySelectorAll('.action-btn').forEach(btn => {
+                btn.addEventListener('click', handleStatusChange);
+            });
+        }
+
+        function getActionButtons(order) {
+            switch (order.status) {
+                case 'pending':
+                    return `<button class="action-btn preparing-btn" data-id="${order.id}" data-status="preparing">Start Preparing</button>`;
+                case 'preparing':
+                    return `<button class="action-btn ready-btn" data-id="${order.id}" data-status="ready">Mark Ready</button>`;
+                case 'ready':
+                    return `<button class="action-btn complete-btn" data-id="${order.id}" data-status="completed">Complete Order</button>`;
+                default:
+                    return '';
+            }
+        }
+
+        async function handleStatusChange(e) {
+            const orderId = e.target.dataset.id;
+            const newStatus = e.target.dataset.status;
+
+            try {
+                await db.collection('orders').doc(orderId).update({
+                    status: newStatus,
+                    [`${newStatus}At`]: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            } catch (error) {
+                console.error('Error updating order:', error);
+                alert('Failed to update order status');
+            }
+        }
+
+        function updateStats(orders) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const pendingCount = orders.filter(o => o.status === 'pending').length;
+            const preparingCount = orders.filter(o => o.status === 'preparing').length;
+            const readyCount = orders.filter(o => o.status === 'ready').length;
+
+            // Calculate today's revenue
+            const todayOrders = orders.filter(o => {
+                const orderDate = o.timestamp ? o.timestamp.toDate() : new Date(o.createdAt);
+                return orderDate >= today;
+            });
+            const todayRevenue = todayOrders.reduce((sum, o) => sum + (o.total || 0), 0);
+
+            document.getElementById('pendingCount').textContent = pendingCount;
+            document.getElementById('preparingCount').textContent = preparingCount;
+            document.getElementById('readyCount').textContent = readyCount;
+            document.getElementById('todayTotal').textContent = `$${todayRevenue.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>

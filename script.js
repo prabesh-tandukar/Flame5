@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
   initParallaxEffect();
   initCardHoverEffects();
   initMobileQuickNav();
+  initShoppingCart();
 });
 
 // ================================
@@ -694,3 +695,510 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// ================================
+// SHOPPING CART SYSTEM
+// ================================
+function initShoppingCart() {
+    // Cart state
+    let cart = JSON.parse(localStorage.getItem('flame5Cart')) || [];
+
+    // DOM elements
+    const floatingCart = document.getElementById('floatingCart');
+    const cartBadge = document.getElementById('cartBadge');
+    const cartModal = document.getElementById('cartModal');
+    const closeCart = document.getElementById('closeCart');
+    const cartItems = document.getElementById('cartItems');
+    const totalAmount = document.getElementById('totalAmount');
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    const clearCartBtn = document.getElementById('clearCartBtn');
+    const checkoutModal = document.getElementById('checkoutModal');
+    const closeCheckout = document.getElementById('closeCheckout');
+
+    // Add to cart buttons
+    const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+
+    // Initialize cart
+    updateCartUI();
+
+    // Add to cart functionality
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const name = this.dataset.name;
+            const price = parseFloat(this.dataset.price);
+            const category = this.dataset.category;
+
+            addToCart({ name, price, category });
+
+            // Visual feedback
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 200);
+        });
+    });
+
+    // Add item to cart
+    function addToCart(item) {
+        const existingItem = cart.find(i => i.name === item.name);
+
+        if (existingItem) {
+            existingItem.quantity++;
+        } else {
+            cart.push({ ...item, quantity: 1 });
+        }
+
+        saveCart();
+        updateCartUI();
+        showAddedNotification(item.name);
+    }
+
+    // Remove item from cart
+    function removeFromCart(itemName) {
+        cart = cart.filter(item => item.name !== itemName);
+        saveCart();
+        updateCartUI();
+    }
+
+    // Update item quantity
+    function updateQuantity(itemName, change) {
+        const item = cart.find(i => i.name === itemName);
+        if (item) {
+            item.quantity += change;
+            if (item.quantity <= 0) {
+                removeFromCart(itemName);
+            } else {
+                saveCart();
+                updateCartUI();
+            }
+        }
+    }
+
+    // Clear cart
+    function clearCart() {
+        if (confirm('Are you sure you want to clear your cart?')) {
+            cart = [];
+            saveCart();
+            updateCartUI();
+        }
+    }
+
+    // Save cart to localStorage
+    function saveCart() {
+        localStorage.setItem('flame5Cart', JSON.stringify(cart));
+    }
+
+    // Update cart UI
+    function updateCartUI() {
+        // Update badge
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartBadge.textContent = totalItems;
+        cartBadge.classList.toggle('hidden', totalItems === 0);
+
+        // Update cart items
+        if (cart.length === 0) {
+            cartItems.innerHTML = `
+                <div class="empty-cart">
+                    <div class="empty-cart-icon">🛒</div>
+                    <p>Your cart is empty</p>
+                </div>
+            `;
+            checkoutBtn.disabled = true;
+            checkoutBtn.style.opacity = '0.5';
+        } else {
+            cartItems.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-category">${item.category}</div>
+                    </div>
+                    <div class="cart-item-price">$${(item.price * item.quantity).toFixed(2)}</div>
+                    <div class="cart-item-controls">
+                        <button class="qty-btn" onclick="updateCartQuantity('${item.name}', -1)">−</button>
+                        <span class="qty-display">${item.quantity}</span>
+                        <button class="qty-btn" onclick="updateCartQuantity('${item.name}', 1)">+</button>
+                        <button class="remove-item" onclick="removeCartItem('${item.name}')">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+            checkoutBtn.disabled = false;
+            checkoutBtn.style.opacity = '1';
+        }
+
+        // Update total
+        const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        totalAmount.textContent = `$${total.toFixed(2)}`;
+    }
+
+    // Show cart modal
+    floatingCart.addEventListener('click', () => {
+        cartModal.classList.add('active');
+    });
+
+    // Close cart modal
+    closeCart.addEventListener('click', () => {
+        cartModal.classList.remove('active');
+    });
+
+    cartModal.addEventListener('click', (e) => {
+        if (e.target === cartModal) {
+            cartModal.classList.remove('active');
+        }
+    });
+
+    // Clear cart button
+    clearCartBtn.addEventListener('click', clearCart);
+
+    // Checkout button
+    checkoutBtn.addEventListener('click', () => {
+        cartModal.classList.remove('active');
+        checkoutModal.classList.add('active');
+        resetCheckoutFlow();
+    });
+
+    // Close checkout modal
+    closeCheckout.addEventListener('click', () => {
+        checkoutModal.classList.remove('active');
+    });
+
+    checkoutModal.addEventListener('click', (e) => {
+        if (e.target === checkoutModal) {
+            checkoutModal.classList.remove('active');
+        }
+    });
+
+    // Make functions global for onclick handlers
+    window.updateCartQuantity = updateQuantity;
+    window.removeCartItem = removeFromCart;
+
+    // Show added notification
+    function showAddedNotification(itemName) {
+        const notification = document.createElement('div');
+        notification.textContent = `${itemName} added to cart!`;
+        notification.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            background: linear-gradient(135deg, #ff6600, #ff3300);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            font-weight: 700;
+            z-index: 10000;
+            animation: slideInRight 0.3s ease;
+        `;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 2000);
+    }
+
+    // Initialize checkout flow
+    initCheckoutFlow();
+}
+
+// ================================
+// CHECKOUT FLOW WITH FIREBASE
+// ================================
+function initCheckoutFlow() {
+    const sendOtpBtn = document.getElementById('sendOtpBtn');
+    const phoneNumber = document.getElementById('phoneNumber');
+    const verifyOtpBtn = document.getElementById('verifyOtpBtn');
+    const otpCode = document.getElementById('otpCode');
+    const resendOtp = document.getElementById('resendOtp');
+    const confirmOrderBtn = document.getElementById('confirmOrderBtn');
+    const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+
+    // Initialize reCAPTCHA when checkout modal opens
+    document.getElementById('checkoutBtn').addEventListener('click', () => {
+        setTimeout(() => {
+            initRecaptcha();
+        }, 500);
+    });
+
+    // Send OTP with Firebase
+    sendOtpBtn.addEventListener('click', async () => {
+        let phone = phoneNumber.value.trim();
+        if (!phone || phone.length < 8) {
+            alert('Please enter a valid phone number');
+            return;
+        }
+
+        // Format phone number for NZ if not already formatted
+        if (!phone.startsWith('+')) {
+            if (phone.startsWith('0')) {
+                phone = '+64' + phone.substring(1);
+            } else {
+                phone = '+64' + phone;
+            }
+        }
+
+        sendOtpBtn.disabled = true;
+        sendOtpBtn.textContent = 'Sending...';
+
+        try {
+            confirmationResult = await auth.signInWithPhoneNumber(phone, recaptchaVerifier);
+            document.getElementById('displayPhone').textContent = phone;
+            showCheckoutStep(2);
+            showNotification('Verification code sent to ' + phone);
+        } catch (error) {
+            console.error('SMS Error:', error);
+            let errorMessage = 'Failed to send verification code. ';
+
+            if (error.code === 'auth/invalid-phone-number') {
+                errorMessage += 'Invalid phone number format.';
+            } else if (error.code === 'auth/too-many-requests') {
+                errorMessage += 'Too many attempts. Please try again later.';
+            } else if (error.code === 'auth/captcha-check-failed') {
+                errorMessage += 'Security check failed. Please refresh and try again.';
+            } else {
+                errorMessage += error.message;
+            }
+
+            alert(errorMessage);
+            // Reinitialize reCAPTCHA
+            initRecaptcha();
+        } finally {
+            sendOtpBtn.disabled = false;
+            sendOtpBtn.textContent = 'Send Code';
+        }
+    });
+
+    // Verify OTP with Firebase
+    verifyOtpBtn.addEventListener('click', async () => {
+        const code = otpCode.value.trim();
+        if (!code || code.length !== 6) {
+            alert('Please enter a valid 6-digit code');
+            return;
+        }
+
+        verifyOtpBtn.disabled = true;
+        verifyOtpBtn.textContent = 'Verifying...';
+
+        try {
+            await confirmationResult.confirm(code);
+            showCheckoutStep(3);
+            displayOrderSummary();
+            showNotification('Phone verified successfully!');
+        } catch (error) {
+            console.error('Verification Error:', error);
+            alert('Invalid verification code. Please try again.');
+            otpCode.value = '';
+        } finally {
+            verifyOtpBtn.disabled = false;
+            verifyOtpBtn.textContent = 'Verify Code';
+        }
+    });
+
+    // Resend OTP
+    resendOtp.addEventListener('click', async () => {
+        let phone = phoneNumber.value.trim();
+        if (!phone.startsWith('+')) {
+            if (phone.startsWith('0')) {
+                phone = '+64' + phone.substring(1);
+            } else {
+                phone = '+64' + phone;
+            }
+        }
+
+        try {
+            initRecaptcha();
+            confirmationResult = await auth.signInWithPhoneNumber(phone, recaptchaVerifier);
+            showNotification('New verification code sent!');
+        } catch (error) {
+            console.error('Resend Error:', error);
+            alert('Failed to resend code. Please try again.');
+        }
+    });
+
+    // Confirm order - Save to Firestore
+    confirmOrderBtn.addEventListener('click', async () => {
+        confirmOrderBtn.disabled = true;
+        confirmOrderBtn.textContent = 'Placing Order...';
+
+        try {
+            const orderNumber = Math.floor(10000 + Math.random() * 90000);
+            const cart = JSON.parse(localStorage.getItem('flame5Cart')) || [];
+            const user = auth.currentUser;
+
+            const orderData = {
+                orderNumber: orderNumber,
+                phone: phoneNumber.value,
+                userId: user ? user.uid : null,
+                items: cart,
+                total: calculateTotal(),
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                status: 'pending',
+                createdAt: new Date().toISOString()
+            };
+
+            // Save to Firestore
+            await db.collection('orders').add(orderData);
+
+            document.getElementById('orderNumber').textContent = orderNumber;
+
+            // Also save to localStorage as backup
+            saveOrder(orderData);
+
+            // Clear cart
+            localStorage.removeItem('flame5Cart');
+
+            showCheckoutStep(4);
+            showNotification('Order placed successfully!');
+
+        } catch (error) {
+            console.error('Order Error:', error);
+            alert('Failed to place order. Please try again.');
+        } finally {
+            confirmOrderBtn.disabled = false;
+            confirmOrderBtn.textContent = 'Confirm Order';
+        }
+    });
+
+    // Close success
+    closeSuccessBtn.addEventListener('click', () => {
+        document.getElementById('checkoutModal').classList.remove('active');
+        // Sign out user after order
+        auth.signOut();
+        location.reload();
+    });
+}
+
+function resetCheckoutFlow() {
+    showCheckoutStep(1);
+    document.getElementById('phoneNumber').value = '';
+    document.getElementById('otpCode').value = '';
+}
+
+function showCheckoutStep(step) {
+    for (let i = 1; i <= 4; i++) {
+        const stepEl = document.getElementById(`step${i}`);
+        if (stepEl) {
+            stepEl.classList.toggle('hidden', i !== step);
+        }
+    }
+}
+
+function displayOrderSummary() {
+    const cart = JSON.parse(localStorage.getItem('flame5Cart')) || [];
+    const summary = document.getElementById('orderSummary');
+
+    summary.innerHTML = cart.map(item => `
+        <div class="summary-item">
+            <div>
+                <div class="summary-item-name">${item.name}</div>
+                <div class="summary-item-qty">Qty: ${item.quantity}</div>
+            </div>
+            <div class="summary-item-price">$${(item.price * item.quantity).toFixed(2)}</div>
+        </div>
+    `).join('') + `
+        <div class="summary-item" style="border-top: 2px solid rgba(255, 102, 0, 0.3); padding-top: 1rem; margin-top: 1rem;">
+            <div class="summary-item-name" style="font-size: 1.3rem;">Total</div>
+            <div class="summary-item-price" style="font-size: 1.5rem;">$${calculateTotal().toFixed(2)}</div>
+        </div>
+    `;
+}
+
+function calculateTotal() {
+    const cart = JSON.parse(localStorage.getItem('flame5Cart')) || [];
+    return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+}
+
+function saveOrder(order) {
+    const orders = JSON.parse(localStorage.getItem('flame5Orders')) || [];
+    orders.push(order);
+    localStorage.setItem('flame5Orders', JSON.stringify(orders));
+}
+
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #ff6600, #ff3300);
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 15px;
+        font-weight: 700;
+        z-index: 10000;
+        animation: slideInDown 0.3s ease;
+        max-width: 90%;
+        text-align: center;
+    `;
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.style.animation = 'slideOutUp 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Add animation styles
+const cartAnimations = document.createElement('style');
+cartAnimations.textContent = `
+    @keyframes slideInRight {
+        from { transform: translateX(400px); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes slideOutRight {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(400px); opacity: 0; }
+    }
+
+    @keyframes slideInDown {
+        from { transform: translate(-50%, -100px); opacity: 0; }
+        to { transform: translate(-50%, 0); opacity: 1; }
+    }
+
+    @keyframes slideOutUp {
+        from { transform: translate(-50%, 0); opacity: 1; }
+        to { transform: translate(-50%, -100px); opacity: 0; }
+    }
+`;
+document.head.appendChild(cartAnimations);
+
+// ================================
+// FIREBASE CONFIGURATION
+// ================================
+const firebaseConfig = {
+    apiKey: "AIzaSyAzLELqijT7vg2p0jMqxim0tforocB5uyU",
+    authDomain: "flame5-orders.firebaseapp.com",
+    projectId: "flame5-orders",
+    storageBucket: "flame5-orders.firebasestorage.app",
+    messagingSenderId: "1073281350654",
+    appId: "1:1073281350654:web:943e1163e021747e00deaf",
+    measurementId: "G-YK2E62FND4"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+// Configure reCAPTCHA for phone auth
+let recaptchaVerifier = null;
+let confirmationResult = null;
+
+function initRecaptcha() {
+    if (recaptchaVerifier) {
+        recaptchaVerifier.clear();
+    }
+    recaptchaVerifier = new firebase.auth.RecaptchaVerifier('sendOtpBtn', {
+        'size': 'invisible',
+        'callback': (response) => {
+            // reCAPTCHA solved, allow signInWithPhoneNumber
+            console.log('reCAPTCHA verified');
+        },
+        'expired-callback': () => {
+            // Reset reCAPTCHA
+            console.log('reCAPTCHA expired');
+            showNotification('Verification expired. Please try again.');
+        }
+    });
+}
