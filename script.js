@@ -1184,21 +1184,48 @@ const db = firebase.firestore();
 // Configure reCAPTCHA for phone auth
 let recaptchaVerifier = null;
 let confirmationResult = null;
+let recaptchaWidgetId = null;
 
 function initRecaptcha() {
-    if (recaptchaVerifier) {
-        recaptchaVerifier.clear();
-    }
-    recaptchaVerifier = new firebase.auth.RecaptchaVerifier('sendOtpBtn', {
-        'size': 'invisible',
-        'callback': (response) => {
-            // reCAPTCHA solved, allow signInWithPhoneNumber
-            console.log('reCAPTCHA verified');
-        },
-        'expired-callback': () => {
-            // Reset reCAPTCHA
-            console.log('reCAPTCHA expired');
-            showNotification('Verification expired. Please try again.');
+    // If reCAPTCHA already exists, just reset it instead of creating new one
+    if (recaptchaVerifier && recaptchaWidgetId !== null) {
+        try {
+            grecaptcha.reset(recaptchaWidgetId);
+            console.log('reCAPTCHA reset');
+            return;
+        } catch (e) {
+            console.log('Could not reset reCAPTCHA, creating new one');
         }
-    });
+    }
+
+    // Clear existing verifier if any
+    if (recaptchaVerifier) {
+        try {
+            recaptchaVerifier.clear();
+        } catch (e) {
+            console.log('Could not clear reCAPTCHA');
+        }
+        recaptchaVerifier = null;
+    }
+
+    // Create new reCAPTCHA verifier
+    try {
+        recaptchaVerifier = new firebase.auth.RecaptchaVerifier('sendOtpBtn', {
+            'size': 'invisible',
+            'callback': (response) => {
+                console.log('reCAPTCHA verified');
+            },
+            'expired-callback': () => {
+                console.log('reCAPTCHA expired');
+                showNotification('Verification expired. Please try again.');
+            }
+        });
+
+        // Render and store widget ID for future resets
+        recaptchaVerifier.render().then((widgetId) => {
+            recaptchaWidgetId = widgetId;
+        });
+    } catch (e) {
+        console.log('reCAPTCHA init error:', e);
+    }
 }
