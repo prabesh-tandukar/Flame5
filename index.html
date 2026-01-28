@@ -750,6 +750,9 @@
               *Philly Steak Burger is not included in this deal
             </p>
             <p class="deal-price">$19.99</p>
+            <button class="btn btn-primary combo-order-btn" data-combo="any-burger" data-price="19.99">
+              Choose Your Burger
+            </button>
           </div>
 
           <div class="deal-card premium" data-animation="fade-up">
@@ -757,6 +760,10 @@
             <h3>Philly Steak Combo</h3>
             <p class="deal-includes">F5 Philly Steak + Fries + Cold Drink</p>
             <p class="deal-price">$29.99</p>
+            <button class="add-to-cart-btn" data-name="Philly Steak Combo" data-price="29.99" data-category="Meal Deal">
+              <span class="cart-icon">🛒</span>
+              <span class="cart-text">Add to Cart</span>
+            </button>
           </div>
         </div>
       </div>
@@ -821,6 +828,44 @@
         </div>
       </div>
     </footer>
+
+    <!-- Burger Selection Modal for Combo -->
+    <div class="burger-select-modal" id="burgerSelectModal">
+      <div class="burger-select-content">
+        <div class="burger-select-header">
+          <h2>Choose Your Burger</h2>
+          <button class="close-burger-select" id="closeBurgerSelect">&times;</button>
+        </div>
+        <p class="burger-select-subtitle">Select a burger for your combo meal</p>
+        <div class="burger-options" id="burgerOptions">
+          <div class="burger-option" data-burger="Pendu Samosa">
+            <span class="burger-option-name">Pendu Samosa</span>
+            <span class="burger-option-check">✓</span>
+          </div>
+          <div class="burger-option" data-burger="F5 Cheeto">
+            <span class="burger-option-name">F5 Cheeto</span>
+            <span class="burger-option-check">✓</span>
+          </div>
+          <div class="burger-option" data-burger="Paneer Tikka">
+            <span class="burger-option-name">Paneer Tikka</span>
+            <span class="burger-option-check">✓</span>
+          </div>
+          <div class="burger-option" data-burger="Patiala Chicken Tikka">
+            <span class="burger-option-name">Patiala Chicken Tikka</span>
+            <span class="burger-option-check">✓</span>
+          </div>
+          <div class="burger-option" data-burger="F5 Smash">
+            <span class="burger-option-name">F5 Smash</span>
+            <span class="burger-option-check">✓</span>
+          </div>
+          <div class="burger-option" data-burger="F5 Angus Cheese Burger">
+            <span class="burger-option-name">F5 Angus Cheese Burger</span>
+            <span class="burger-option-check">✓</span>
+          </div>
+        </div>
+        <button class="btn btn-primary large" id="confirmBurgerBtn" disabled>Add Combo to Cart</button>
+      </div>
+    </div>
 
     <!-- Floating Cart Button -->
     <div class="floating-cart-btn" id="floatingCart">

@@ -1138,6 +1138,106 @@ function showNotification(message) {
     }, 3000);
 }
 
+// ================================
+// COMBO MEAL BURGER SELECTION
+// ================================
+function initComboOrdering() {
+    const burgerSelectModal = document.getElementById('burgerSelectModal');
+    const closeBurgerSelect = document.getElementById('closeBurgerSelect');
+    const burgerOptions = document.querySelectorAll('.burger-option');
+    const confirmBurgerBtn = document.getElementById('confirmBurgerBtn');
+    const comboOrderBtns = document.querySelectorAll('.combo-order-btn');
+
+    let selectedBurger = null;
+    let comboPrice = 0;
+
+    // Open modal when combo button is clicked
+    comboOrderBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            comboPrice = parseFloat(btn.dataset.price);
+            selectedBurger = null;
+
+            // Reset selections
+            burgerOptions.forEach(opt => opt.classList.remove('selected'));
+            confirmBurgerBtn.disabled = true;
+
+            burgerSelectModal.classList.add('active');
+        });
+    });
+
+    // Close modal
+    closeBurgerSelect.addEventListener('click', () => {
+        burgerSelectModal.classList.remove('active');
+    });
+
+    burgerSelectModal.addEventListener('click', (e) => {
+        if (e.target === burgerSelectModal) {
+            burgerSelectModal.classList.remove('active');
+        }
+    });
+
+    // Select burger option
+    burgerOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            // Remove previous selection
+            burgerOptions.forEach(opt => opt.classList.remove('selected'));
+
+            // Select this one
+            option.classList.add('selected');
+            selectedBurger = option.dataset.burger;
+            confirmBurgerBtn.disabled = false;
+        });
+    });
+
+    // Confirm and add to cart
+    confirmBurgerBtn.addEventListener('click', () => {
+        if (selectedBurger) {
+            // Add combo to cart
+            const comboItem = {
+                name: `Combo: ${selectedBurger}`,
+                price: comboPrice,
+                category: 'Meal Deal'
+            };
+
+            // Get cart and add item
+            let cart = JSON.parse(localStorage.getItem('flame5Cart')) || [];
+            const existingItem = cart.find(i => i.name === comboItem.name);
+
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ ...comboItem, quantity: 1 });
+            }
+
+            localStorage.setItem('flame5Cart', JSON.stringify(cart));
+
+            // Close modal
+            burgerSelectModal.classList.remove('active');
+
+            // Show notification
+            showNotification(`${selectedBurger} Combo added to cart!`);
+
+            // Update cart UI
+            updateCartBadge();
+        }
+    });
+}
+
+function updateCartBadge() {
+    const cart = JSON.parse(localStorage.getItem('flame5Cart')) || [];
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const cartBadge = document.getElementById('cartBadge');
+    if (cartBadge) {
+        cartBadge.textContent = totalItems;
+        cartBadge.classList.toggle('hidden', totalItems === 0);
+    }
+}
+
+// Initialize combo ordering when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    initComboOrdering();
+});
+
 // Add animation styles
 const cartAnimations = document.createElement('style');
 cartAnimations.textContent = `
